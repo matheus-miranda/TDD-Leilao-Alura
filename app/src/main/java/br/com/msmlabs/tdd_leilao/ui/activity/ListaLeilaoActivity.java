@@ -33,7 +33,7 @@ public class ListaLeilaoActivity extends AppCompatActivity {
 
     private List<Leilao> leiloesDeExemplo() {
         Leilao console = new Leilao("Console");
-        return new ArrayList<>(Collections.singletonList(
+        return new ArrayList<>(Arrays.asList(
                 console
         ));
     }
