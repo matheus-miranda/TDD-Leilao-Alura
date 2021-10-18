@@ -98,4 +98,57 @@ public class LeilaoTest {
         assertEquals(400.0, tresMaioresLancesDevolvidos.get(1).getValor(), DELTA);
         assertEquals(200.0, tresMaioresLancesDevolvidos.get(2).getValor(), DELTA);
     }
+
+    @Test
+    public void deve_DevolverTresMaioresLances_QuandoNaoRecebeLances() {
+        List<Lance> tresMaioresLancesDevolvidos = LEILAO.getTresMaioresLances();
+
+        assertEquals(0, tresMaioresLancesDevolvidos.size());
+    }
+
+    @Test
+    public void deve_DevolverTresMaioresLances_QuandoRecebeUmLance() {
+        LEILAO.propoe(new Lance(JOAO, 200.0));
+
+        List<Lance> tresMaioresLancesDevolvidos = LEILAO.getTresMaioresLances();
+
+        assertEquals(1, tresMaioresLancesDevolvidos.size());
+        assertEquals(200.0, tresMaioresLancesDevolvidos.get(0).getValor(), DELTA);
+    }
+
+    @Test
+    public void deve_DevolverTresMaioresLances_QuandoRecebeDoisLances() {
+        LEILAO.propoe(new Lance(JOAO, 200.0));
+        LEILAO.propoe(new Lance(JOAO, 300.0));
+
+        List<Lance> tresMaioresLancesDevolvidos = LEILAO.getTresMaioresLances();
+
+        assertEquals(2, tresMaioresLancesDevolvidos.size());
+        assertEquals(300.0, tresMaioresLancesDevolvidos.get(0).getValor(), DELTA);
+        assertEquals(200.0, tresMaioresLancesDevolvidos.get(1).getValor(), DELTA);
+    }
+
+    @Test
+    public void deve_DevolverTresMaioresLances_QuandoRecebeMaisDeTresLances() {
+        LEILAO.propoe(new Lance(JOAO, 200.0));
+        LEILAO.propoe(new Lance(new Usuario("Joana"), 300.0));
+        LEILAO.propoe(new Lance(JOAO, 100.0));
+        LEILAO.propoe(new Lance(JOAO, 600.0));
+
+        List<Lance> tresMaioresLancesDevolvidosParaQuatroLances = LEILAO.getTresMaioresLances();
+
+        assertEquals(3, tresMaioresLancesDevolvidosParaQuatroLances.size());
+        assertEquals(600, tresMaioresLancesDevolvidosParaQuatroLances.get(0).getValor(), DELTA);
+        assertEquals(300, tresMaioresLancesDevolvidosParaQuatroLances.get(1).getValor(), DELTA);
+        assertEquals(200, tresMaioresLancesDevolvidosParaQuatroLances.get(2).getValor(), DELTA);
+
+        LEILAO.propoe(new Lance(JOAO, 700.0));
+
+        List<Lance> tresMaioresLancesDevolvidosParaCincoLances = LEILAO.getTresMaioresLances();
+
+        assertEquals(3, tresMaioresLancesDevolvidosParaCincoLances.size());
+        assertEquals(700.0, tresMaioresLancesDevolvidosParaCincoLances.get(0).getValor(), DELTA);
+        assertEquals(600.0, tresMaioresLancesDevolvidosParaCincoLances.get(1).getValor(), DELTA);
+        assertEquals(300.0, tresMaioresLancesDevolvidosParaCincoLances.get(2).getValor(), DELTA);
+    }
 }
