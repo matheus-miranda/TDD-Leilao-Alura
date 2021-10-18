@@ -4,11 +4,14 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import java.util.List;
+
 public class LeilaoTest {
 
     // Criar cenário de teste
     private final Leilao LEILAO = new Leilao("console");
     private final Usuario JOAO = new Usuario("Joao");
+    private static final double DELTA = 0.00001;
 
     // https://dzone.com/articles/7-popular-unit-test-naming Should_ExpectedBehavior_WhenStateUnderTest
     // [Nome do método] [Estado do teste] [Resultado esperado] ou
@@ -30,7 +33,7 @@ public class LeilaoTest {
 
         // Valor delta é a diferença entre os valores com pontos flutuantes e se ele for maior,
         // significa que os valores são equivalentes
-        assertEquals(200.0, maiorLanceDevolvido, 0.000001);
+        assertEquals(200.0, maiorLanceDevolvido, DELTA);
     }
 
     @Test
@@ -40,7 +43,7 @@ public class LeilaoTest {
 
         double maiorLanceDevolvido = LEILAO.getMaiorLance();
 
-        assertEquals(200.0, maiorLanceDevolvido, 0.000001);
+        assertEquals(200.0, maiorLanceDevolvido, DELTA);
     }
 
     @Test
@@ -50,7 +53,7 @@ public class LeilaoTest {
 
         double maiorLanceDevolvido = LEILAO.getMaiorLance();
 
-        assertEquals(200.0, maiorLanceDevolvido, 0.000001);
+        assertEquals(200.0, maiorLanceDevolvido, DELTA);
     }
 
     @Test
@@ -59,7 +62,7 @@ public class LeilaoTest {
 
         double menorLanceDevolvido = LEILAO.getMenorLance();
 
-        assertEquals(200.0, menorLanceDevolvido, 0.00001);
+        assertEquals(200.0, menorLanceDevolvido, DELTA);
     }
 
     @Test
@@ -69,7 +72,7 @@ public class LeilaoTest {
 
         double menorLanceDevolvido = LEILAO.getMenorLance();
 
-        assertEquals(100.0, menorLanceDevolvido, 0.00001);
+        assertEquals(100.0, menorLanceDevolvido, DELTA);
     }
 
     @Test
@@ -79,6 +82,20 @@ public class LeilaoTest {
 
         double menorLanceDevolvido = LEILAO.getMenorLance();
 
-        assertEquals(100.0, menorLanceDevolvido, 0.00001);
+        assertEquals(100.0, menorLanceDevolvido, DELTA);
+    }
+
+    @Test
+    public void deve_RetornarTresMaioresLances_QuandoRecebeExatosTresLances() {
+        LEILAO.propoe(new Lance(JOAO, 200.0));
+        LEILAO.propoe(new Lance(new Usuario("Joana"), 400.0));
+        LEILAO.propoe(new Lance(JOAO, 500.0));
+
+        List<Lance> tresMaioresLancesDevolvidos = LEILAO.getTresMaioresLances();
+
+        assertEquals(3, tresMaioresLancesDevolvidos.size());
+        assertEquals(500.0, tresMaioresLancesDevolvidos.get(0).getValor(), DELTA);
+        assertEquals(400.0, tresMaioresLancesDevolvidos.get(1).getValor(), DELTA);
+        assertEquals(200.0, tresMaioresLancesDevolvidos.get(2).getValor(), DELTA);
     }
 }
