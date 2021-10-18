@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 import br.com.msmlabs.tdd_leilao.R;
@@ -37,9 +37,15 @@ public class ListaLeilaoActivity extends AppCompatActivity {
         Leilao console = new Leilao("Console");
         console.propoe(new Lance(new Usuario("Alex"), 200.0));
         console.propoe(new Lance(new Usuario("Fran"), 300.0));
+        console.propoe(new Lance(new Usuario("Joao"), 100.0));
+        console.propoe(new Lance(new Usuario("Beto"), 700.0));
 
-        return new ArrayList<>(Collections.singletonList(
-                console
+        Leilao computador = new Leilao("Computador");
+        computador.propoe(new Lance(new Usuario("Alex"), 1000.0));
+        computador.propoe(new Lance(new Usuario("Fran"), 9000.0));
+
+        return new ArrayList<>(Arrays.asList(
+                console, computador
         ));
     }
 
