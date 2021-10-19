@@ -1,5 +1,6 @@
 package br.com.msmlabs.tdd_leilao.model;
 
+import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -114,15 +115,15 @@ public class LeilaoTest {
     public void deve_DevolverTresMaioresLances_QuandoRecebeMaisDeTresLances() {
         LEILAO.propoe(new Lance(JOAO, 200.0));
         LEILAO.propoe(new Lance(new Usuario("Joana"), 300.0));
-        LEILAO.propoe(new Lance(JOAO, 100.0));
+        LEILAO.propoe(new Lance(JOAO, 400.0));
         LEILAO.propoe(new Lance(new Usuario("Fran"), 600.0));
 
         List<Lance> tresMaioresLancesDevolvidosParaQuatroLances = LEILAO.getTresMaioresLances();
 
         assertEquals(3, tresMaioresLancesDevolvidosParaQuatroLances.size());
         assertEquals(600, tresMaioresLancesDevolvidosParaQuatroLances.get(0).getValor(), DELTA);
-        assertEquals(300, tresMaioresLancesDevolvidosParaQuatroLances.get(1).getValor(), DELTA);
-        assertEquals(200, tresMaioresLancesDevolvidosParaQuatroLances.get(2).getValor(), DELTA);
+        assertEquals(400, tresMaioresLancesDevolvidosParaQuatroLances.get(1).getValor(), DELTA);
+        assertEquals(300, tresMaioresLancesDevolvidosParaQuatroLances.get(2).getValor(), DELTA);
 
         LEILAO.propoe(new Lance(JOAO, 700.0));
 
@@ -131,7 +132,7 @@ public class LeilaoTest {
         assertEquals(3, tresMaioresLancesDevolvidosParaCincoLances.size());
         assertEquals(700.0, tresMaioresLancesDevolvidosParaCincoLances.get(0).getValor(), DELTA);
         assertEquals(600.0, tresMaioresLancesDevolvidosParaCincoLances.get(1).getValor(), DELTA);
-        assertEquals(300.0, tresMaioresLancesDevolvidosParaCincoLances.get(2).getValor(), DELTA);
+        assertEquals(400.0, tresMaioresLancesDevolvidosParaCincoLances.get(2).getValor(), DELTA);
     }
 
     @Test
@@ -149,19 +150,27 @@ public class LeilaoTest {
     }
 
     @Test
-    public void naoDeve_AdicionarLance_QuandoForMenorQueMaiorLance() {
+    public void deve_LancarException_QuandoReceberLanceMenorQueMaiorLance() {
         LEILAO.propoe(new Lance(JOAO, 300.0));
-        LEILAO.propoe(new Lance(new Usuario("Joana"), 200.0));
+        try {
+            LEILAO.propoe(new Lance(new Usuario("Joana"), 200.0));
+            fail("Era esperada uma RuntimeException");
+        } catch (RuntimeException e) {
+            assertEquals("Lance for menor que maior lance", e.getMessage());
+        }
 
-        int quantidadeLancesDevolvidas = LEILAO.quantidadeLances();
 
-        assertEquals(1, quantidadeLancesDevolvidas);
     }
 
     @Test
     public void naoDeve_AdicionarLance_QuandoMesmoUsuarioDerDoisLancesSeguidos() {
         LEILAO.propoe(new Lance(JOAO, 200.0));
-        LEILAO.propoe(new Lance(new Usuario("Joao"), 300.0));
+        try {
+            LEILAO.propoe(new Lance(new Usuario("Joao"), 300.0));
+            fail("Era esperada uma RuntimeException");
+        } catch (RuntimeException e) {
+            assertEquals("Mesmo usuario do ultimo lance", e.getMessage());
+        }
 
         int qtdLancesDevolvidos = LEILAO.quantidadeLances();
 
@@ -183,9 +192,14 @@ public class LeilaoTest {
                 .lance(JOANA, 900.0)
                 .lance(JOAO, 1000.0)
                 .lance(JOANA, 1100.0)
-                .lance(JOAO, 1200.0)
-                .lance(JOANA, 1300.0)
                 .build();
+
+        try {
+            leilao.propoe(new Lance(JOAO, 1200.0));
+            fail("Era esperada uma RuntimeException");
+        } catch (RuntimeException exception) {
+            assertEquals("Mais de cinco lances do mesmo usuario", exception.getMessage());
+        }
 
         int qtdLancesDevolvidos = leilao.quantidadeLances();
 
