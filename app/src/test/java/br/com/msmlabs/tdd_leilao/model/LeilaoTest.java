@@ -99,7 +99,7 @@ public class LeilaoTest {
     @Test
     public void deve_DevolverTresMaioresLances_QuandoRecebeDoisLances() {
         LEILAO.propoe(new Lance(JOAO, 200.0));
-        LEILAO.propoe(new Lance(JOAO, 300.0));
+        LEILAO.propoe(new Lance(new Usuario("Joana"), 300.0));
 
         List<Lance> tresMaioresLancesDevolvidos = LEILAO.getTresMaioresLances();
 
@@ -113,7 +113,7 @@ public class LeilaoTest {
         LEILAO.propoe(new Lance(JOAO, 200.0));
         LEILAO.propoe(new Lance(new Usuario("Joana"), 300.0));
         LEILAO.propoe(new Lance(JOAO, 100.0));
-        LEILAO.propoe(new Lance(JOAO, 600.0));
+        LEILAO.propoe(new Lance(new Usuario("Fran"), 600.0));
 
         List<Lance> tresMaioresLancesDevolvidosParaQuatroLances = LEILAO.getTresMaioresLances();
 
@@ -147,12 +147,22 @@ public class LeilaoTest {
     }
 
     @Test
-    public void nadDeve_AdicionarLance_QuandoForMenorQueMaiorLance() {
+    public void naoDeve_AdicionarLance_QuandoForMenorQueMaiorLance() {
         LEILAO.propoe(new Lance(JOAO, 300.0));
         LEILAO.propoe(new Lance(new Usuario("Joana"), 200.0));
 
         int quantidadeLancesDevolvidas = LEILAO.quantidadeLances();
 
         assertEquals(1, quantidadeLancesDevolvidas);
+    }
+
+    @Test
+    public void naoDeve_AdicionarLance_QuandoMesmoUsuarioDerDoisLancesSeguidos() {
+        LEILAO.propoe(new Lance(JOAO, 200.0));
+        LEILAO.propoe(new Lance(new Usuario("Joao"), 300.0));
+
+        int qtdLancesDevolvidos = LEILAO.quantidadeLances();
+
+        assertEquals(1, qtdLancesDevolvidos);
     }
 }
