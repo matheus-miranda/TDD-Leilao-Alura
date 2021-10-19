@@ -25,6 +25,14 @@ public class Leilao implements Serializable {
             Usuario usuarioNovo = lance.getUsuario();
             Usuario ultimoUsuario = lances.get(0).getUsuario();
             if (usuarioNovo.equals(ultimoUsuario)) return;
+
+            int lancesUsuario = 0;
+            for (Lance l : lances) {
+                if (l.getUsuario().equals(usuarioNovo)) {
+                    lancesUsuario++;
+                    if (lancesUsuario == 5) return;
+                }
+            }
         }
 
         lances.add(lance);

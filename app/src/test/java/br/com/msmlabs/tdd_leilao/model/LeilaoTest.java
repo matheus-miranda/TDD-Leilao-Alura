@@ -165,4 +165,27 @@ public class LeilaoTest {
 
         assertEquals(1, qtdLancesDevolvidos);
     }
+
+    @Test
+    public void naoDeve_AdicionarLance_QuandoMesmoUsuarioDerMaisDeCincoLances() {
+        final Usuario JOANA = new Usuario("Joana");
+
+        LEILAO.propoe(new Lance(JOAO, 200.0));
+        LEILAO.propoe(new Lance(JOANA, 300.0));
+        LEILAO.propoe(new Lance(JOAO, 400.0));
+        LEILAO.propoe(new Lance(JOANA, 500.0));
+        LEILAO.propoe(new Lance(JOAO, 600.0));
+        LEILAO.propoe(new Lance(JOANA, 700.0));
+        LEILAO.propoe(new Lance(JOAO, 800.0));
+        LEILAO.propoe(new Lance(JOANA, 900.0));
+        LEILAO.propoe(new Lance(JOAO, 1000.0));
+        LEILAO.propoe(new Lance(JOANA, 1100.0));
+        LEILAO.propoe(new Lance(JOAO, 1200.0));
+        LEILAO.propoe(new Lance(JOANA, 1300.0));
+
+        int qtdLancesDevolvidos = LEILAO.quantidadeLances();
+
+        assertEquals(10, qtdLancesDevolvidos);
+    }
+
 }
