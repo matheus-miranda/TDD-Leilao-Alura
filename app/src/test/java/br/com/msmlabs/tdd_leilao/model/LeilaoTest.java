@@ -47,16 +47,6 @@ public class LeilaoTest {
     }
 
     @Test
-    public void deve_DevolveMaiorLance_QuandoRecebeMaisDeUmLanceEmOrdemDecrescente() {
-        LEILAO.propoe(new Lance(JOAO, 200.0));
-        LEILAO.propoe(new Lance(new Usuario("Joana"), 100.0));
-
-        double maiorLanceDevolvido = LEILAO.getMaiorLance();
-
-        assertEquals(200.0, maiorLanceDevolvido, DELTA);
-    }
-
-    @Test
     public void deve_DevolveMenorLance_QuandoRecebeUmLance() {
         LEILAO.propoe(new Lance(JOAO, 200.0));
 
@@ -69,16 +59,6 @@ public class LeilaoTest {
     public void deve_DevolveMenorLance_QuandoRecebeMaisDeUmLanceEmOrdemCrescente() {
         LEILAO.propoe(new Lance(JOAO, 100.0));
         LEILAO.propoe(new Lance(new Usuario("Joana"), 200.0));
-
-        double menorLanceDevolvido = LEILAO.getMenorLance();
-
-        assertEquals(100.0, menorLanceDevolvido, DELTA);
-    }
-
-    @Test
-    public void deve_DevolveMenorLance_QuandoRecebeMaisDeUmLanceEmOrdemDecrescente() {
-        LEILAO.propoe(new Lance(JOAO, 200.0));
-        LEILAO.propoe(new Lance(new Usuario("Joana"), 100.0));
 
         double menorLanceDevolvido = LEILAO.getMenorLance();
 
@@ -164,5 +144,15 @@ public class LeilaoTest {
         double menorLanceDevolvido = LEILAO.getMenorLance();
 
         assertEquals(0.0, menorLanceDevolvido, DELTA);
+    }
+
+    @Test
+    public void nadDeve_AdicionarLance_QuandoForMenorQueMaiorLance() {
+        LEILAO.propoe(new Lance(JOAO, 300.0));
+        LEILAO.propoe(new Lance(new Usuario("Joana"), 200.0));
+
+        int quantidadeLancesDevolvidas = LEILAO.quantidadeLances();
+
+        assertEquals(1, quantidadeLancesDevolvidas);
     }
 }
