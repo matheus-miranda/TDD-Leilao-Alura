@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import java.util.List;
 
+import br.com.msmlabs.tdd_leilao.builder.LeilaoBuilder;
+
 public class LeilaoTest {
 
     // Criar cenário de teste
@@ -170,20 +172,22 @@ public class LeilaoTest {
     public void naoDeve_AdicionarLance_QuandoMesmoUsuarioDerMaisDeCincoLances() {
         final Usuario JOANA = new Usuario("Joana");
 
-        LEILAO.propoe(new Lance(JOAO, 200.0));
-        LEILAO.propoe(new Lance(JOANA, 300.0));
-        LEILAO.propoe(new Lance(JOAO, 400.0));
-        LEILAO.propoe(new Lance(JOANA, 500.0));
-        LEILAO.propoe(new Lance(JOAO, 600.0));
-        LEILAO.propoe(new Lance(JOANA, 700.0));
-        LEILAO.propoe(new Lance(JOAO, 800.0));
-        LEILAO.propoe(new Lance(JOANA, 900.0));
-        LEILAO.propoe(new Lance(JOAO, 1000.0));
-        LEILAO.propoe(new Lance(JOANA, 1100.0));
-        LEILAO.propoe(new Lance(JOAO, 1200.0));
-        LEILAO.propoe(new Lance(JOANA, 1300.0));
+        final Leilao leilao = new LeilaoBuilder("console")
+                .lance(JOAO, 200.0)
+                .lance(JOANA, 300.0)
+                .lance(JOAO, 400.0)
+                .lance(JOANA, 500.0)
+                .lance(JOAO, 600.0)
+                .lance(JOANA, 700.0)
+                .lance(JOAO, 800.0)
+                .lance(JOANA, 900.0)
+                .lance(JOAO, 1000.0)
+                .lance(JOANA, 1100.0)
+                .lance(JOAO, 1200.0)
+                .lance(JOANA, 1300.0)
+                .build();
 
-        int qtdLancesDevolvidos = LEILAO.quantidadeLances();
+        int qtdLancesDevolvidos = leilao.quantidadeLances();
 
         assertEquals(10, qtdLancesDevolvidos);
     }
