@@ -2,9 +2,7 @@ package br.com.msmlabs.tdd_leilao.model;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.util.List;
 
@@ -19,9 +17,6 @@ public class LeilaoTest {
     private final Leilao LEILAO = new Leilao("console");
     private final Usuario JOAO = new Usuario("Joao");
     private static final double DELTA = 0.00001;
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     // https://dzone.com/articles/7-popular-unit-test-naming Should_ExpectedBehavior_WhenStateUnderTest
     // [Nome do método] [Estado do teste] [Resultado esperado] ou
@@ -172,9 +167,8 @@ public class LeilaoTest {
         assertEquals(1, qtdLancesDevolvidos);
     }
 
-    @Test
+    @Test(expected = UsuarioJaDeuCincoLancesException.class)
     public void naoDeve_AdicionarLance_QuandoMesmoUsuarioDerMaisDeCincoLances() {
-        exception.expect(UsuarioJaDeuCincoLancesException.class);
         final Usuario JOANA = new Usuario("Joana");
 
         final Leilao leilao = new LeilaoBuilder("console")
