@@ -1,13 +1,17 @@
 package br.com.msmlabs.tdd_leilao.model;
 
-import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.List;
 
 import br.com.msmlabs.tdd_leilao.builder.LeilaoBuilder;
+import br.com.msmlabs.tdd_leilao.exception.LanceMenorQueMaiorLanceException;
+import br.com.msmlabs.tdd_leilao.exception.LanceSeguidoDoMesmoUsuarioException;
+import br.com.msmlabs.tdd_leilao.exception.UsuarioJaDeuCincoLancesException;
 
 public class LeilaoTest {
 
@@ -15,6 +19,9 @@ public class LeilaoTest {
     private final Leilao LEILAO = new Leilao("console");
     private final Usuario JOAO = new Usuario("Joao");
     private static final double DELTA = 0.00001;
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     // https://dzone.com/articles/7-popular-unit-test-naming Should_ExpectedBehavior_WhenStateUnderTest
     // [Nome do método] [Estado do teste] [Resultado esperado] ou
@@ -149,28 +156,16 @@ public class LeilaoTest {
         assertEquals(0.0, menorLanceDevolvido, DELTA);
     }
 
-    @Test
+    @Test(expected = LanceMenorQueMaiorLanceException.class)
     public void deve_LancarException_QuandoReceberLanceMenorQueMaiorLance() {
         LEILAO.propoe(new Lance(JOAO, 300.0));
-        try {
-            LEILAO.propoe(new Lance(new Usuario("Joana"), 200.0));
-            fail("Era esperada uma RuntimeException");
-        } catch (RuntimeException e) {
-            assertEquals("Lance for menor que maior lance", e.getMessage());
-        }
-
-
+        LEILAO.propoe(new Lance(new Usuario("Joana"), 200.0));
     }
 
-    @Test
+    @Test(expected = LanceSeguidoDoMesmoUsuarioException.class)
     public void naoDeve_AdicionarLance_QuandoMesmoUsuarioDerDoisLancesSeguidos() {
         LEILAO.propoe(new Lance(JOAO, 200.0));
-        try {
-            LEILAO.propoe(new Lance(new Usuario("Joao"), 300.0));
-            fail("Era esperada uma RuntimeException");
-        } catch (RuntimeException e) {
-            assertEquals("Mesmo usuario do ultimo lance", e.getMessage());
-        }
+        LEILAO.propoe(new Lance(new Usuario("Joao"), 300.0));
 
         int qtdLancesDevolvidos = LEILAO.quantidadeLances();
 
@@ -179,6 +174,7 @@ public class LeilaoTest {
 
     @Test
     public void naoDeve_AdicionarLance_QuandoMesmoUsuarioDerMaisDeCincoLances() {
+        exception.expect(UsuarioJaDeuCincoLancesException.class);
         final Usuario JOANA = new Usuario("Joana");
 
         final Leilao leilao = new LeilaoBuilder("console")
@@ -193,13 +189,7 @@ public class LeilaoTest {
                 .lance(JOAO, 1000.0)
                 .lance(JOANA, 1100.0)
                 .build();
-
-        try {
-            leilao.propoe(new Lance(JOAO, 1200.0));
-            fail("Era esperada uma RuntimeException");
-        } catch (RuntimeException exception) {
-            assertEquals("Mais de cinco lances do mesmo usuario", exception.getMessage());
-        }
+        leilao.propoe(new Lance(JOAO, 1200.0));
 
         int qtdLancesDevolvidos = leilao.quantidadeLances();
 
