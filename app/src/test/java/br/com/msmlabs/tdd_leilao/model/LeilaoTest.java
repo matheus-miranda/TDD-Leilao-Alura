@@ -1,5 +1,11 @@
 package br.com.msmlabs.tdd_leilao.model;
 
+import static org.hamcrest.CoreMatchers.both;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -27,7 +33,8 @@ public class LeilaoTest {
         String descricaoDevolvida = LEILAO.getDescricao();
 
         // Testar resultado esperado
-        assertEquals("console", descricaoDevolvida);
+        //assertEquals("console", descricaoDevolvida);
+        assertThat(descricaoDevolvida, is("console"));
     }
 
     @Test
@@ -38,7 +45,8 @@ public class LeilaoTest {
 
         // Valor delta é a diferença entre os valores com pontos flutuantes e se ele for maior,
         // significa que os valores são equivalentes
-        assertEquals(200.0, maiorLanceDevolvido, DELTA);
+        //assertEquals(200.0, maiorLanceDevolvido, DELTA);
+        assertThat(maiorLanceDevolvido, closeTo(200.0, DELTA));
     }
 
     @Test
@@ -78,10 +86,26 @@ public class LeilaoTest {
 
         List<Lance> tresMaioresLancesDevolvidos = LEILAO.getTresMaioresLances();
 
-        assertEquals(3, tresMaioresLancesDevolvidos.size());
-        assertEquals(500.0, tresMaioresLancesDevolvidos.get(0).getValor(), DELTA);
-        assertEquals(400.0, tresMaioresLancesDevolvidos.get(1).getValor(), DELTA);
-        assertEquals(200.0, tresMaioresLancesDevolvidos.get(2).getValor(), DELTA);
+        //assertEquals(3, tresMaioresLancesDevolvidos.size());
+//        assertThat(tresMaioresLancesDevolvidos, hasSize(equalTo(3)));
+        //assertEquals(500.0, tresMaioresLancesDevolvidos.get(0).getValor(), DELTA);
+        //assertThat(tresMaioresLancesDevolvidos, hasItem(new Lance(JOAO, 500.0)));
+        //assertEquals(400.0, tresMaioresLancesDevolvidos.get(1).getValor(), DELTA);
+        //assertEquals(200.0, tresMaioresLancesDevolvidos.get(2).getValor(), DELTA);
+        // Ordem deve ser correta
+//        assertThat(tresMaioresLancesDevolvidos, contains(
+//                new Lance(JOAO, 500.0),
+//                new Lance(new Usuario("Joana"), 400.0),
+//                new Lance(JOAO, 200.0)
+//        ));
+        assertThat(tresMaioresLancesDevolvidos,
+                both(hasSize(3))
+                .and(contains(
+                        new Lance(JOAO, 500.0),
+                        new Lance(new Usuario("Joana"), 400.0),
+                        new Lance(JOAO, 200.0)
+                ))
+        );
     }
 
     @Test
