@@ -8,11 +8,9 @@ import org.junit.Test;
 
 public class FormataValorTest {
 
-    private final FormataValor formataValor = new FormataValor();
-
     @Test
     public void deve_FormatarValorParaMoedaLocal_QuandoRecebeDouble() {
-        String valorDevolvido = formataValor.valorFormatado(1000.0);
+        String valorDevolvido = FormataValor.valorFormatado(1000.0);
 
         assertThat(valorDevolvido, is("R$ 1.000,00"));
     }

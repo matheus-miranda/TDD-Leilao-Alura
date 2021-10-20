@@ -13,6 +13,7 @@ import java.util.List;
 
 import br.com.msmlabs.tdd_leilao.R;
 import br.com.msmlabs.tdd_leilao.model.Leilao;
+import br.com.msmlabs.tdd_leilao.util.FormataValor;
 
 public class ListaLeilaoAdapter extends RecyclerView.Adapter<ListaLeilaoAdapter.ViewHolder> {
 
@@ -63,7 +64,7 @@ public class ListaLeilaoAdapter extends RecyclerView.Adapter<ListaLeilaoAdapter.
         void vincula(Leilao leilao) {
             this.leilao = leilao;
             descricao.setText(leilao.getDescricao());
-            maiorLance.setText(String.valueOf(leilao.getMaiorLance()));
+            maiorLance.setText(FormataValor.valorFormatado(leilao.getMaiorLance()));
         }
 
     }
